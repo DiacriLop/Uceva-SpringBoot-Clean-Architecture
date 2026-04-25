@@ -3,18 +3,19 @@ package uceva.cleanarchitecture.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import uceva.cleanarchitecture.application.usecase.GetAllDealershipsUseCase;
 import uceva.cleanarchitecture.application.usecase.GetAllProductsUseCase;
 import uceva.cleanarchitecture.application.usecase.GetAllUsersUseCase;
 import uceva.cleanarchitecture.application.usecase.GetAllVehiclesUseCase;
-
+import uceva.cleanarchitecture.domain.repository.DealershipRepository;
 import uceva.cleanarchitecture.domain.repository.ProductRepository;
 import uceva.cleanarchitecture.domain.repository.UserRepository;
 import uceva.cleanarchitecture.domain.repository.VehicleRepository;
-
+import uceva.cleanarchitecture.infrastructure.datasource.DealershipDatasource;
 import uceva.cleanarchitecture.infrastructure.datasource.ProductDatasource;
 import uceva.cleanarchitecture.infrastructure.datasource.UserDatasource;
 import uceva.cleanarchitecture.infrastructure.datasource.VehicleDatasource;
-
+import uceva.cleanarchitecture.infrastructure.repository.DealershipRepositoryImpl;
 import uceva.cleanarchitecture.infrastructure.repository.ProductRepositoryImpl;
 import uceva.cleanarchitecture.infrastructure.repository.UserRepositoryImpl;
 import uceva.cleanarchitecture.infrastructure.repository.VehicleRepositoryImpl;
@@ -39,6 +40,11 @@ public class AppConfig {
         return new VehicleDatasource();
     }
 
+    @Bean
+    DealershipDatasource dealershipDatasource(){
+        return new DealershipDatasource();
+    }
+
     // 🔹 REPOSITORIES
 
     @Bean
@@ -56,6 +62,11 @@ public class AppConfig {
         return new VehicleRepositoryImpl(vehicleDatasource);
     }
 
+    @Bean
+    DealershipRepository dealershipRepository(DealershipDatasource dealershipDatasource) {
+        return new DealershipRepositoryImpl(dealershipDatasource);
+    }
+
     // 🔹 USE CASES
 
     @Bean
@@ -71,5 +82,10 @@ public class AppConfig {
     @Bean
     GetAllVehiclesUseCase getAllVehiclesUseCase(VehicleRepository vehicleRepository) {
         return new GetAllVehiclesUseCase(vehicleRepository);
+    }
+
+    @Bean
+    GetAllDealershipsUseCase getAllDealershipsUseCase(DealershipRepository dealershipRepository) {
+        return new GetAllDealershipsUseCase(dealershipRepository);
     }
 }
